@@ -2,40 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-class Projectile : MonoBehaviour 
+[RequireComponent(typeof(Movement))]
+public class Projectile : MonoBehaviour
 {
-	public GameObject projectile;
+  [SerializeField]
+  private float lifetime = 2.0f;
 
-	protected Rigidbody2D rb2d;
+  private Movement movement;
+  private Vector2 velocity = new Vector2(0, 0);
 
-	protected Vector2 position;
-	protected Vector3 rotation;
+  public void Awake()
+  {
+    movement = GetComponent<Movement>();
+  }
 
-  protected float speed = 7.0f;
-  protected float lifetime = 2.0f;
-  protected float cooldown = 0.66f;
-  protected float lastFireTime = 0.0f; 
+  public void FixedUpdate()
+  {
+    if (velocity.magnitude > 0) {
+      movement.Move(velocity);
+    }
+  }
 
-	public Projectile(Vector2 _position, Vector3 _rotation)
-	{
-		position = _position;
-		rotation = _rotation;
-	}
-
-	public void Awake()
-	{
-		rb2d = GetComponent<Rigidbody2D>();
-	}
-
-	public void Fire()
-	{
-    var projectileInstance = Instantiate(
-			projectile, 
-			transform.position, 
-			Quaternion.Euler(rotation)
-		);
-    projectileInstance.GetComponent<Rigidbody2D>().velocity = velocity * speed;
-
-    Destroy(projectileInstance, lifetime);
-	}
+  public void Shoot(Vector2 direction)
+  {
+    velocity = direction;
+    movement.Move(velocity * 2);
+    Destroy(gameObject, lifetime);
+  }
 }
