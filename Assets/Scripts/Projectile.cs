@@ -16,7 +16,7 @@ public class Projectile : MonoBehaviour
     movement = GetComponent<Movement>();
   }
 
-  public void FixedUpdate()
+  public void Update()
   {
     if (velocity.magnitude > 0) {
       movement.Move(velocity);

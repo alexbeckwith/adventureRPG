@@ -3,22 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Movement))]
+[RequireComponent(typeof(Health))]
 public class Enemy : MonoBehaviour
 {
   private Movement movement;
+  private Health health;
 
   private float nextChangeDirectionTime = 0.0f;
   private Vector2 movementDirection;
 
   void Awake()
   {
+    health = GetComponent<Health>();
     movement = GetComponent<Movement>();
     movementDirection = GetRandomDirection();
+
+    health.OnDied += () => Destroy(this.gameObject);
   }
 
-  void FixedUpdate()
+  void Update()
   {
     Walk();
+  }
+
+  void OnTriggerEnter2D(Collider2D collider)
+  {
+    if (collider.tag == "Projectile") {
+      health.TakeDamage(1);
+      Destroy(collider.gameObject);
+    }
   }
 
   void Walk()
