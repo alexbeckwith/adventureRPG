@@ -40,7 +40,6 @@ public class Player : MonoBehaviour
 
   void OnCollisionEnter2D(Collision2D collision)
   {
-    Debug.Log((Time.time, invincibilityEnd));
     if (!IsInvincible() && collision.gameObject.tag == "Enemy") {
       health.TakeDamage(1);
     }
@@ -58,6 +57,7 @@ public class Player : MonoBehaviour
 
   void OnTakeDamage(float health)
   {
+    Debug.Log(health);
     invincibilityEnd = Time.time + invincibilityTime;
     healthSlider.value = health;
   }
@@ -70,7 +70,7 @@ public class Player : MonoBehaviour
   void Walk()
   {
     var direction = movement.Move(
-        new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"))
+      new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"))
     );
 
     if (direction != -1) {
@@ -82,7 +82,6 @@ public class Player : MonoBehaviour
   {
     if (Input.GetButtonDown("Fire1") && weapon != null) {
       if (weapon.Attack(lookDirection)) {
-        Debug.Log(lookDirection);
         animator.SetTrigger("isAttacking");
       }
     }

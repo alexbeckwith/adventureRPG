@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 [RequireComponent(typeof(Movement))]
@@ -8,6 +9,7 @@ public class Enemy : MonoBehaviour
 {
   private Movement movement;
   private Health health;
+  private Slider healthSlider;
 
   private float nextChangeDirectionTime = 0.0f;
   private Vector2 movementDirection;
@@ -15,10 +17,18 @@ public class Enemy : MonoBehaviour
   void Awake()
   {
     health = GetComponent<Health>();
+    healthSlider = GetHealthSlider();
+
     movement = GetComponent<Movement>();
     movementDirection = GetRandomDirection();
-
     health.OnDied += () => Destroy(this.gameObject);
+    health.OnTakeDamage += OnTakeDamage;
+  }
+
+  void Start()
+  {
+    healthSlider.value = health.maxHP;
+    healthSlider.maxValue = health.maxHP;
   }
 
   void Update()
@@ -32,6 +42,18 @@ public class Enemy : MonoBehaviour
       health.TakeDamage(1);
       Destroy(collider.gameObject);
     }
+  }
+
+  Slider GetHealthSlider()
+  {
+    var slider = Instantiate(Resources.Load("FloatingHealthCanvas"), transform) as GameObject;
+
+    return slider.transform.Find("Slider").gameObject.GetComponent<Slider>();
+  }
+
+  void OnTakeDamage(float newHealth)
+  {
+    healthSlider.value = newHealth;
   }
 
   void Walk()

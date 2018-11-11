@@ -6,32 +6,30 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
   [SerializeField]
-  private float maxHP;
+  public float maxHP;
 
-  private float currentHP;
+  public float currentHP { get; private set; }
   public event Action OnDied;
   public event Action<float> OnTakeDamage;
 
   void Awake()
   {
-      currentHP = maxHP;
+    currentHP = maxHP;
   }
 
   public void TakeDamage(float damage)
   {
     currentHP -= damage;
 
-    if (currentHP <= 0) {
-      Die();
-    } else if (OnTakeDamage != null) {
-      OnTakeDamage(currentHP);
-    }
-  }
-
-  private void Die()
-  {
-    if (OnDied != null) {
-      OnDied();
+    switch (currentHP) {
+      case float hp when hp > 0 && OnTakeDamage != null:
+        OnTakeDamage(currentHP);
+        break;
+      case float hp when hp <= 0 && OnDied != null:
+        OnDied();
+        break;
+      default:
+        break;
     }
   }
 }

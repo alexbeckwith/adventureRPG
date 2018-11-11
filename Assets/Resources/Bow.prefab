@@ -44,4 +44,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectile: {fileID: 1164059298311382, guid: c059bbfd5ec6e422992f6f43cc7d7140, type: 3}
-  cooldown: 0.5
+  cooldown: 0.4
