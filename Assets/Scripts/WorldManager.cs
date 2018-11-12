@@ -24,8 +24,8 @@ class WorldManager : MonoBehaviour
   private Vector2 GetPosition()
   {
     return new Vector2(
-      Random.Range(-worldWidth, worldWidth), 
-      Random.Range(-worldHeight, worldHeight)
+      Random.Range(0, worldWidth * 0.75f), 
+      Random.Range(0, worldHeight * 0.75f)
     );
   }
 }
